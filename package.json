@@ -1,0 +1,24 @@
+{
+  "name": "authenticate-backend-assignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suryapal-dev/authenticate-backend-assignment.git"
+  },
+  "keywords": [
+    "authenticate",
+    "backend",
+    "assignment"
+  ],
+  "author": "Suryapal Rao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suryapal-dev/authenticate-backend-assignment/issues"
+  },
+  "homepage": "https://github.com/suryapal-dev/authenticate-backend-assignment#readme"
+}
