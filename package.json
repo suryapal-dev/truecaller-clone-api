@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,7 +17,7 @@
     "assignment"
   ],
   "author": "Suryapal Rao",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/suryapal-dev/authenticate-backend-assignment/issues"
   },
