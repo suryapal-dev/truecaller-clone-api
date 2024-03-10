@@ -1,4 +1,4 @@
-import express, { json } from 'express'
+import express, { json, urlencoded } from 'express'
 import config from '../config.js'
 import { login, register } from "../controllers/auth.controller.js"
 import { globalSearchRequest, loginRequest, registerRequest, reportRequest, detailRequest, updateUserRequest, updateContactRequest, createContactRequest } from '../request.js'
@@ -9,6 +9,8 @@ import { createContact, deleteContact, getContactDetail, updateContact } from '.
 import rateLimit from 'express-rate-limit'
 import cors from 'cors'
 import helmet from 'helmet'
+import xss from 'xss-clean'
+import compression from 'compression'
 
 const app = express()
 
@@ -39,7 +41,10 @@ const execute = () => {
             return callback(null, true)
         }
     }))
+    app.use(xss())
+    app.use(compression())
     app.use(rateLimiter)
+    app.use(urlencoded({ extended: true }))
     app.use(json({ extended: true }))
 
     // ROUTES :: START
