@@ -6,10 +6,40 @@ import { getUserDetails, globalSearch, me, updateUser } from '../controllers/use
 import authentication from '../middleware/authentication.js'
 import { report, unReport } from '../controllers/report.controller.js'
 import { createContact, deleteContact, getContactDetail, updateContact } from '../controllers/contact.controller.js'
+import rateLimit from 'express-rate-limit'
+import cors from 'cors'
+import helmet from 'helmet'
 
 const app = express()
 
+const myOrigins = [
+    "http://localhost:3000"
+]
+
+const rateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    message: {
+        message: "Too many requests",
+        statusCode: 429
+    }
+})
+
 const execute = () => {
+    app.use(helmet.crossOriginResourcePolicy({
+        policy: 'cross-origin'
+    }))
+    app.use(cors({
+        origin: (origin, callback) => {
+            if (!origin) return callback(null, true)
+
+            if (myOrigins.indexOf(origin) === -1) {
+                return callback(new Error('Origin does not have access from CORS policy for this site.'), false)
+            }
+            return callback(null, true)
+        }
+    }))
+    app.use(rateLimiter)
     app.use(json({ extended: true }))
 
     // ROUTES :: START
