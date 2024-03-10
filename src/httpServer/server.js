@@ -1,11 +1,11 @@
 import express, { json, urlencoded } from 'express'
 import config from '../config.js'
 import { login, register } from "../controllers/auth.controller.js"
-import { globalSearchRequest, loginRequest, registerRequest, reportRequest, detailRequest, updateUserRequest, updateContactRequest, createContactRequest } from '../request.js'
+import { globalSearchRequest, loginRequest, registerRequest, reportRequest, detailRequest, updateUserRequest, updateContactRequest, createContactRequest, contactSearchRequest } from '../request.js'
 import { getUserDetails, globalSearch, me, updateUser } from '../controllers/user.controller.js'
 import authentication from '../middleware/authentication.js'
 import { report, unReport } from '../controllers/report.controller.js'
-import { createContact, deleteContact, getContactDetail, updateContact } from '../controllers/contact.controller.js'
+import { createContact, deleteContact, getContactDetail, getMyContact, updateContact } from '../controllers/contact.controller.js'
 import rateLimit from 'express-rate-limit'
 import cors from 'cors'
 import helmet from 'helmet'
@@ -61,6 +61,7 @@ const execute = () => {
     app.get('/users/:id', detailRequest, getUserDetails)
     app.patch('/users/:id', updateUserRequest, updateUser)
 
+    app.get('/contacts', contactSearchRequest, getMyContact)
     app.post('/contacts', createContactRequest, createContact)
     app.get('/contacts/:id', detailRequest, getContactDetail)
     app.patch('/contacts/:id', updateContactRequest, updateContact)

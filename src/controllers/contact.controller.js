@@ -171,9 +171,54 @@ const createContact = async (req, res) => {
     }
 }
 
+const getMyContact = async (req, res) => {
+    try {
+        const isValidated = validationResult(req)
+        if (!isValidated.isEmpty()) {
+            return response(res, null, 422, isValidated.array())
+        }
+
+        const options = matchedData(req)
+        const name_search = options.name_search || null
+        const phone_search = options.phone_search || null
+
+        const currentUser = user(req)
+
+        const query = {
+            where: {
+                userId: currentUser.id
+            }
+        }
+        if (name_search) {
+            query.where.name = {
+                contains: name_search,
+                mode: "insensitive"
+            }
+        } else if (phone_search) {
+            query.where.phoneNumber = {
+                contains: phone_search,
+                mode: "insensitive"
+            }
+        }
+
+        const contacts = await prisma.contact.findMany(query)
+
+        if (contacts && contacts.length) {
+            for (const item of contacts) {
+                item.spamCount = await getSpamCount(item.phoneNumber)
+            }
+        }
+
+        return response(res, null, 200, contacts)
+    } catch (error) {
+        return response(res, error.message, 500)
+    }
+}
+
 export {
     getContactDetail,
     updateContact,
     deleteContact,
-    createContact
+    createContact,
+    getMyContact
 }

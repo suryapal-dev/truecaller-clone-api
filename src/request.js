@@ -128,6 +128,17 @@ const createContactRequest = [
         .withMessage('phoneNumber field is not valid number'),
 ]
 
+const contactSearchRequest = [
+    query('name_search')
+        .optional()
+        .isAlpha()
+        .withMessage('name_search field can only contain alphanumeric characters'),
+    query('phone_search')
+        .optional()
+        .isNumeric()
+        .withMessage('phone_search field can only contain numeric characters')
+]
+
 export {
     loginRequest,
     registerRequest,
@@ -136,5 +147,6 @@ export {
     detailRequest,
     updateUserRequest,
     updateContactRequest,
-    createContactRequest
+    createContactRequest,
+    contactSearchRequest
 }
