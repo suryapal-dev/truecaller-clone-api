@@ -5,8 +5,6 @@ import bcrypt from 'bcrypt'
 import { matchedData, validationResult } from "express-validator"
 import jwt from 'jsonwebtoken'
 
-const salt = 10
-
 const login = async (req, res) => {
     try {
         const isValidated = validationResult(req)
@@ -17,7 +15,7 @@ const login = async (req, res) => {
         const payload = matchedData(req)
         const user = await prisma.user.findUnique({
             where: {
-                phone: payload.phone
+                phoneNumber: payload.phoneNumber
             }
         })
 
@@ -33,7 +31,9 @@ const login = async (req, res) => {
         const {password, ...userPayload} = user
 
         jwt.sign(
-            userPayload,
+            {
+                userId: user.id
+            },
             config.jwt_secret,
             {
                 expiresIn: "24h"
@@ -63,13 +63,13 @@ const register = async (req, res) => {
         const payload = matchedData(req)
         const checkIfUserExist = await prisma.user.findUnique({
             where: {
-                phone: payload.phone
+                phoneNumber: payload.phoneNumber
             }
         })
         if (checkIfUserExist) {
             return response(res, 'User already exist with given phone', 409)
         }
-        payload['password'] = await bcrypt.hash(payload.password, salt)
+        payload['password'] = await bcrypt.hash(payload.password, config.jwt_salt)
 
         const newUser = await prisma.user.create({
             data: payload

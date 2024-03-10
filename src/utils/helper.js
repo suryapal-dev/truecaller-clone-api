@@ -1,3 +1,6 @@
+import config from "../config.js"
+import prisma from "../prisma.js"
+
 const response = (res, message = null, status = 200, data = null) => {
     const resObj = {
         message,
@@ -14,6 +17,114 @@ const response = (res, message = null, status = 200, data = null) => {
     return res.status(status).json(resObj)
 }
 
+const user = (req) => {
+    return req.loggedUser || null
+}
+
+const getUser = async (id) => {
+    id = Number(id)
+    const user = await prisma.user.findUnique({
+        where: {
+            id: id
+        }
+    })
+    if (!user) {
+        return null
+    }
+    const {password, ...userPayload} = user
+    return userPayload
+}
+
+const getUserByPhone = async (phoneNumber) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            phoneNumber
+        }
+    })
+    if (!user) {
+        return null
+    }
+    const {password, ...userPayload} = user
+    return userPayload
+}
+
+const incrementReportCount = async (phoneNumber) => {
+    const record = await prisma.reportCount.findUnique({
+        select: {
+            spamCount: true
+        },
+        where: {
+            phoneNumber
+        }
+    })
+
+    if (!record) {
+        await prisma.reportCount.create({
+            data: {
+                phoneNumber,
+                spamCount: 1
+            }
+        })
+        return true
+    }
+    await prisma.reportCount.update({
+        where: {
+            phoneNumber
+        },
+        data: {
+            spamCount: (record.spamCount || 0) + 1
+        }
+    })
+    return true
+}
+
+const decrementReportCount = async (phoneNumber) => {
+    const record = await prisma.reportCount.findUnique({
+        select: {
+            spamCount: true
+        },
+        where: {
+            phoneNumber
+        }
+    })
+
+    if (!record) {
+        return true
+    }
+    await prisma.reportCount.update({
+        where: {
+            phoneNumber
+        },
+        data: {
+            spamCount: record.spamCount ? record.spamCount - 1 : 0
+        }
+    })
+    return true
+}
+
+const getSpamCount = async (phoneNumber) => {
+    const record = await prisma.reportCount.findUnique({
+        select: {
+            spamCount: true
+        },
+        where: {
+            phoneNumber
+        }
+    })
+
+    if (record) {
+        return record.spamCount
+    }
+
+    return 0
+}
+
 export {
-    response
+    response,
+    user,
+    getUser,
+    incrementReportCount,
+    decrementReportCount,
+    getSpamCount,
+    getUserByPhone
 }
