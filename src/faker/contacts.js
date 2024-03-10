@@ -9,7 +9,7 @@ const generatePhoneNumber = () => {
 
 const contactFake = () => {
     return {
-        userId: 2,
+        userId: 8,
         name: faker.person.fullName(),
         phoneNumber: generatePhoneNumber()
     }

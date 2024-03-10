@@ -39,6 +39,11 @@ const getUserByName = async (currentUser, name_search) => {
             phoneNumber: true,
         },
         where: {
+            NOT: {
+                phoneNumber: {
+                    equals: currentUser.phoneNumber
+                }
+            },
             name: {
                 startsWith: name_search,
                 mode: "insensitive"
@@ -95,10 +100,19 @@ const getUserByName = async (currentUser, name_search) => {
         },
         where: {
             NOT: {
-                name: {
-                    startsWith: name_search,
-                    mode: "insensitive"
-                }
+                OR: [
+                    {
+                        phoneNumber: {
+                            equals: currentUser.phoneNumber
+                        },
+                    },
+                    {
+                        name: {
+                            startsWith: name_search,
+                            mode: "insensitive"
+                        }
+                    }
+                ]
             },
             name: {
                 contains: name_search,
