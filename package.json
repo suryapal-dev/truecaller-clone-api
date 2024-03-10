@@ -7,8 +7,8 @@
     "node": "20.x.x"
   },
   "scripts": {
-    "dev": "node --no-warnings",
-    "watch": "nodemon --no-warnings",
+    "dev": "node --no-warnings index.js",
+    "watch": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
