@@ -1,6 +1,6 @@
 import { matchedData, validationResult } from "express-validator"
 import prisma from "../prisma.js"
-import { getSpamCount, response, user, getUser } from "../utils/helper.js"
+import { getSpamCount, response, user, getUser, getBooleanOfMarkedSpamByCurrentUser } from "../utils/helper.js"
 import bcrypt from 'bcrypt'
 import config from "../config.js"
 
@@ -269,6 +269,9 @@ const getUserDetails = async (req, res) => {
         }
 
         const canUserShowEmail = await checkIfAuthUserIsInDetailUserContact(data.id, currentUser.phoneNumber)
+
+        data.spamCount = await getSpamCount(data.phoneNumber)
+        data.markedSpamByYou = await getBooleanOfMarkedSpamByCurrentUser(currentUser.id, data.phoneNumber)
 
         if (!canUserShowEmail && (currentUser.id !== data.id)) {
             delete data.email

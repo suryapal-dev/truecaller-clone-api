@@ -1,6 +1,6 @@
 import { matchedData, validationResult } from "express-validator"
 import prisma from "../prisma.js"
-import { response, user, getUserByPhone } from "../utils/helper.js"
+import { response, user, getUserByPhone, getSpamCount } from "../utils/helper.js"
 
 const checkIfAuthUserIsInDetailUserContact = async (userId, phoneNumber) => {
     const record = await prisma.contact.findUnique({
@@ -39,6 +39,9 @@ const getContactDetail = async (req, res) => {
         if (!data) {
             return response(res, 'Not found', 404)
         }
+
+        data.spamCount = await getSpamCount(data.phoneNumber)
+        data.markedSpamByYou = await getBooleanOfMarkedSpamByCurrentUser(currentUser.id, data.phoneNumber)
 
         const userRecord = await getUserByPhone(data.phoneNumber)
         if (userRecord) {

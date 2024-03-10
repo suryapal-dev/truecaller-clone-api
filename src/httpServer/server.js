@@ -28,6 +28,7 @@ const rateLimiter = rateLimit({
 })
 
 const execute = () => {
+    app.set('trust proxy', true)
     app.use(helmet.crossOriginResourcePolicy({
         policy: 'cross-origin'
     }))

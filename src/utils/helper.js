@@ -118,6 +118,21 @@ const getSpamCount = async (phoneNumber) => {
     return 0
 }
 
+const getBooleanOfMarkedSpamByCurrentUser = async (userId, phoneNumber) => {
+    const record = await prisma.report.findUnique({
+        where: {
+            userId_phoneNumber: {
+                userId,
+                phoneNumber
+            }
+        }
+    })
+    if (record) {
+        return true
+    }
+    return false
+}
+
 export {
     response,
     user,
@@ -125,5 +140,6 @@ export {
     incrementReportCount,
     decrementReportCount,
     getSpamCount,
-    getUserByPhone
+    getUserByPhone,
+    getBooleanOfMarkedSpamByCurrentUser
 }
