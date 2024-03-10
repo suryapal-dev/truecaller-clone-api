@@ -1,6 +1,6 @@
 import { matchedData, validationResult } from "express-validator"
 import prisma from "../prisma.js"
-import { response, user, getUserByPhone, getSpamCount } from "../utils/helper.js"
+import { response, user, getUserByPhone, getSpamCount, getBooleanOfMarkedSpamByCurrentUser } from "../utils/helper.js"
 
 const checkIfAuthUserIsInDetailUserContact = async (userId, phoneNumber) => {
     const record = await prisma.contact.findUnique({
