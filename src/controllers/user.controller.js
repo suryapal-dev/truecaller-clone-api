@@ -159,7 +159,6 @@ const getUserByPhone = async (currentUser, phone_search) => {
     if (equalUser && equalUser.length) {
         response = response.concat(equalUser)
     } else {
-        console.debug('jejr')
         const containsUser = await prisma.user.findMany({
             select: {
                 id: true,
