@@ -24,11 +24,13 @@ const rateLimiter = rateLimit({
     message: {
         message: "Too many requests",
         statusCode: 429
+    },
+    validate: {
+        xForwardedForHeader: false
     }
 })
 
 const execute = () => {
-    app.set('trust proxy', true)
     app.use(helmet.crossOriginResourcePolicy({
         policy: 'cross-origin'
     }))
