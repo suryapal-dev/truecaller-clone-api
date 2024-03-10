@@ -77,11 +77,6 @@ const updateUserRequest = [
         .trim()
         .isEmail()
         .withMessage('email field is not valid email'),
-    check('phoneNumber')
-        .optional()
-        .trim()
-        .matches(phoneNumberRegex)
-        .withMessage('phoneNumber field is not valid number'),
     check('new_password')
         .optional()
         .trim()

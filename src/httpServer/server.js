@@ -51,20 +51,22 @@ const execute = () => {
     app.post('/sign-up', registerRequest, register)
     app.post('/sign-in', loginRequest, login)
 
-    app.get('/me', authentication, me)
+    app.use(authentication)
 
-    app.get('/users/:id', authentication, detailRequest, getUserDetails)
-    app.patch('/users/:id', authentication, updateUserRequest, updateUser)
+    app.get('/me', me)
 
-    app.post('/contacts', authentication, createContactRequest, createContact)
-    app.get('/contacts/:id', authentication, detailRequest, getContactDetail)
-    app.patch('/contacts/:id', authentication, updateContactRequest, updateContact)
-    app.delete('/contacts/:id', authentication, detailRequest, deleteContact)
+    app.get('/users/:id', detailRequest, getUserDetails)
+    app.patch('/users/:id', updateUserRequest, updateUser)
 
-    app.post('/spam/mark', authentication, reportRequest, report)
-    app.delete('/spam/unmark', authentication, reportRequest, unReport)
+    app.post('/contacts', createContactRequest, createContact)
+    app.get('/contacts/:id', detailRequest, getContactDetail)
+    app.patch('/contacts/:id', updateContactRequest, updateContact)
+    app.delete('/contacts/:id', detailRequest, deleteContact)
 
-    app.get('/global-search', authentication, globalSearchRequest, globalSearch)
+    app.post('/spam/mark', reportRequest, report)
+    app.delete('/spam/unmark', reportRequest, unReport)
+
+    app.get('/global-search', globalSearchRequest, globalSearch)
     // ROUTE :: END
 
     app.listen(config.port, () => {

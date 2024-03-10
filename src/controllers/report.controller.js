@@ -12,6 +12,10 @@ const report = async (req, res) => {
         const payload = matchedData(req)
         const currentUser = user(req)
 
+        if (currentUser.phoneNumber === payload.phoneNumber) {
+            return response(res, 'You cannot mark yourself as spam', 409)
+        }
+
         const alreadyReported = await prisma.report.findFirst({
             select: {
                 userId: true
@@ -49,6 +53,10 @@ const unReport = async (req, res) => {
         
         const payload = matchedData(req)
         const currentUser = user(req)
+
+        if (currentUser.phoneNumber === payload.phoneNumber) {
+            return response(res, 'You cannot mark yourself as spam', 409)
+        }
 
         const record = await prisma.report.findFirst({
             select: {
