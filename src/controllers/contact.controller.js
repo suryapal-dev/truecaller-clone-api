@@ -44,8 +44,7 @@ const getContactDetail = async (req, res) => {
         if (userRecord) {
             const isAddedInContact = await checkIfAuthUserIsInDetailUserContact(userRecord.id, currentUser.phoneNumber)
             if (!isAddedInContact && (userRecord.id !== currentUser.id)) {
-                const {email, ...userData} = data
-                return response(res, null, 200, userData)
+                return response(res, null, 200, data)
             }
             data.email = userRecord.email
         }

@@ -28,7 +28,7 @@ const login = async (req, res) => {
             return response(res, 'Incorrect credential, please try again', 401)
         }
 
-        const {password, ...userPayload} = user
+        delete user.password
 
         jwt.sign(
             {
@@ -43,7 +43,7 @@ const login = async (req, res) => {
                     return response(res, 'Error with signing in, please contact administration!', 500)
                 }
                 return response(res, 'Login success', 200, {
-                    userPayload,
+                    user,
                     token
                 })
             }
@@ -71,7 +71,7 @@ const register = async (req, res) => {
         }
         payload['password'] = await bcrypt.hash(payload.password, config.jwt_salt)
 
-        const newUser = await prisma.user.create({
+        await prisma.user.create({
             data: payload
         })
         return response(res, 'Register success', 201)

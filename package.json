@@ -7,8 +7,9 @@
     "node": "20.x.x"
   },
   "scripts": {
-    "dev": "node --no-warnings index.js",
-    "watch": "nodemon",
+    "lint": "eslint .",
+    "start": "node --no-warnings index.js",
+    "dev": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
@@ -41,6 +42,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
+    "eslint": "^8.57.0",
     "nodemon": "^3.1.0",
     "prisma": "^5.10.2"
   }

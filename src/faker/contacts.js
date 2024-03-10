@@ -1,7 +1,5 @@
 import { faker } from '@faker-js/faker'
-import bcrypt from 'bcrypt'
-import config from '../config.js';
-import prisma from '../prisma.js';
+import prisma from '../prisma.js'
 
 const generatePhoneNumber = () => {
     const startNum = ['6', '7', '8', '9']
@@ -10,7 +8,6 @@ const generatePhoneNumber = () => {
 }
 
 const contactFake = () => {
-    const rnd = Math.floor(Math.random() * 10)
     return {
         userId: 2,
         name: faker.person.fullName(),

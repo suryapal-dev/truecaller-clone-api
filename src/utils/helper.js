@@ -1,4 +1,3 @@
-import config from "../config.js"
 import prisma from "../prisma.js"
 
 const response = (res, message = null, status = 200, data = null) => {
@@ -31,8 +30,8 @@ const getUser = async (id) => {
     if (!user) {
         return null
     }
-    const {password, ...userPayload} = user
-    return userPayload
+    delete user.password
+    return user
 }
 
 const getUserByPhone = async (phoneNumber) => {
@@ -44,8 +43,8 @@ const getUserByPhone = async (phoneNumber) => {
     if (!user) {
         return null
     }
-    const {password, ...userPayload} = user
-    return userPayload
+    delete user.password
+    return user
 }
 
 const incrementReportCount = async (phoneNumber) => {

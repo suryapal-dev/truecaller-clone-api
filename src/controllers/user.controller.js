@@ -3,8 +3,6 @@ import prisma from "../prisma.js"
 import { getSpamCount, response, user, getUser } from "../utils/helper.js"
 import bcrypt from 'bcrypt'
 import config from "../config.js"
-import e from "express"
-import { parse } from "dotenv"
 
 const me = (req, res) => {
     return response(res, null, 200, user(req))
@@ -272,9 +270,9 @@ const getUserDetails = async (req, res) => {
 
         const canUserShowEmail = await checkIfAuthUserIsInDetailUserContact(data.id, currentUser.phoneNumber)
 
-        if (!canUserShowEmail) {
-            const {email, ...userData} = data
-            return response(res, null, 200, userData)
+        if (!canUserShowEmail && (currentUser.id !== data.id)) {
+            delete data.email
+            return response(res, null, 200, data)
         }
 
         return response(res, null, 200, data)
@@ -328,11 +326,11 @@ const updateUser = async (req, res) => {
                     id: parseInt(id)
                 }
             })
-            const {password, ...returnData} = updatedData
-            return response(res, 'Updated', 200, returnData)
+            delete updatedData.password
+            return response(res, 'Updated', 200, updatedData)
         }
-        const {password, ...returnData} = dUser
-        return response(res, null, 200, returnData)
+        delete dUser.password
+        return response(res, null, 200, dUser)
     } catch (error) {
         return response(res, error.message, 500)
     }
