@@ -1,4 +1,4 @@
-# Authenticate Backend Assignment
+# Trucaller Clone API
 
 ### Added Functionality
 ```
